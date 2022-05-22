@@ -1,5 +1,7 @@
 package model;
 
+import java.util.HashMap;
+
 public class Calculator {
     public Integer[][] calculateDistancematrix(Matrix matrix) {
         Integer[][] adjacencyMatrix = duplicateMatrix(matrix.getMatrix());
@@ -34,6 +36,39 @@ public class Calculator {
         }
 
         return distanceMatrix;
+    }
+
+    public HashMap<String, Integer> calculateEccentricity(Integer[][] matrix) {
+        HashMap<String, Integer> eccentricity = new HashMap<>();
+        int letterCounter = 0;
+
+        for (Integer[] integers : matrix) {
+            int counter = 0;
+            for (int j = 0; j < matrix.length; j++) {
+                if (integers[j] > counter) {
+                    counter = integers[j];
+                }
+            }
+            String letter = convertIntToLetter(letterCounter);
+            eccentricity.put(letter, counter);
+            letterCounter++;
+        }
+
+        return eccentricity;
+    }
+
+    public static String convertIntToLetter(int i) {
+        StringBuilder letter = new StringBuilder();
+        int quot = i / 26;
+        int rem = i % 26;
+
+        do {
+            letter.append((char) (65 + rem)); //65 ist der erste Buchstabe in der ASCII-Tabelle
+            if (quot > 0)
+                quot--;
+        } while (quot < 0);
+
+        return letter.toString();
     }
 
     private Integer[][] duplicateMatrix(Integer[][] matrix) {
