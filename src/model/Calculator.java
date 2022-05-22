@@ -40,7 +40,7 @@ public class Calculator {
 
     public HashMap<String, Integer> calculateEccentricity(Integer[][] matrix) {
         HashMap<String, Integer> eccentricity = new HashMap<>();
-        int letterCounter = 4;
+        int letterCounter = 0;
 
         for (Integer[] integers : matrix) {
             int counter = 0;
