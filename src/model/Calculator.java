@@ -40,7 +40,7 @@ public class Calculator {
 
     public HashMap<String, Integer> calculateEccentricity(Integer[][] matrix) {
         HashMap<String, Integer> eccentricity = new HashMap<>();
-        int letterCounter = 0;
+        int letterCounter = 4;
 
         for (Integer[] integers : matrix) {
             int counter = 0;
@@ -58,17 +58,16 @@ public class Calculator {
     }
 
     public static String convertIntToLetter(int i) {
-        StringBuilder letter = new StringBuilder();
+        StringBuilder letters = new StringBuilder();
         int quot = i / 26;
         int rem = i % 26;
+        letters.append((char) (65 + rem)); //65 ist der erste Buchstabe in der ASCII-Tabelle
 
-        do {
-            letter.append((char) (65 + rem)); //65 ist der erste Buchstabe in der ASCII-Tabelle
-            if (quot > 0)
-                quot--;
-        } while (quot < 0);
-
-        return letter.toString();
+        if( quot == 0 ) {
+            return letters.toString();
+        } else {
+            return convertIntToLetter(quot-1) + letters;
+        }
     }
 
     private Integer[][] duplicateMatrix(Integer[][] matrix) {
