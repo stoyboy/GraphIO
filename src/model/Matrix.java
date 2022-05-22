@@ -8,13 +8,16 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class Matrix {
-    private String[][] stringMatrix;
-    private int[][] matrix;
+    private Integer[][] matrix;
     private String filepath;
 
     public Matrix(String filepath) throws GraphIOException {
         setFilepath(filepath);
         readMatrix();
+    }
+
+    public Integer[][] getMatrix() {
+        return this.matrix;
     }
 
     public String getFilepath() {
@@ -49,16 +52,16 @@ public class Matrix {
 
             if (lineCount > 0) {
                 //Erstellt ein neues Array anhand der Anzahl der Zeilen der CSV-Datei.
-                this.stringMatrix = new String[lineCount][lineCount];
-                this.matrix = new int[lineCount][lineCount];
+                String[][] stringMatrix = new String[lineCount][lineCount];
+                this.matrix = new Integer[lineCount][lineCount];
 
                 for (int i = 0; i < lines.size(); i++) {
                     String[] items = lines.get(i).split(separator);
                     if (items.length >= 0)
-                        System.arraycopy(items, 0, this.stringMatrix[i], 0, items.length);
+                        System.arraycopy(items, 0, stringMatrix[i], 0, items.length);
                 }
 
-                parseMatrix();
+                parseMatrix(stringMatrix);
             }
 
         } catch (FileNotFoundException e) {
@@ -68,10 +71,10 @@ public class Matrix {
         }
     }
 
-    private void parseMatrix() throws NumberFormatException {
-        for (int i = 0; i < this.stringMatrix.length; i++) {
-            for (int j = 0; j < this.stringMatrix[i].length; j++) {
-                this.matrix[i][j] = Integer.parseInt(this.stringMatrix[i][j]);
+    private void parseMatrix(String[][] stringMatrix) throws NumberFormatException {
+        for (int i = 0; i < stringMatrix.length; i++) {
+            for (int j = 0; j < stringMatrix[i].length; j++) {
+                this.matrix[i][j] = Integer.parseInt(stringMatrix[i][j]);
             }
         }
     }
