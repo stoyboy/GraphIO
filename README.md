@@ -136,9 +136,9 @@ class Test {
         HashMap<String, Integer> eccentricity = Calculator.calculateEccentricity(distanceMatrix);
         
         System.out.println("Durchmesser");
-        System.out.println("==".repeat(matrixSize));
+        System.out.println("================================");
         System.out.println("dm(G) = " + Calculator.calculateDiameter(eccentricity));
-        System.out.println("==".repeat(matrixSize)+"\n\n\n");
+        System.out.println("================================");
     }
 }
 ````
@@ -160,9 +160,9 @@ class Test {
         HashMap<String, Integer> eccentricity = Calculator.calculateEccentricity(distanceMatrix);
         
         System.out.println("Zentrum");
-        System.out.println("==".repeat(matrixSize));
+        System.out.println("================================");
         System.out.println("Z(G) = " + Calculator.calculateCenter(eccentricity));
-        System.out.println("==".repeat(matrixSize)+"\n\n\n");
+        System.out.println("================================");
     }
 }
 ````
