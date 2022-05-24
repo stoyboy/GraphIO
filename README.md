@@ -36,7 +36,7 @@ class Test {
     public static void main(String[] args) {
         Matrix m = new Matrix("PATH-TO-YOUR-CSV-FILE");
         
-        System.out.println("Adjazenzmatrix");
+        System.out.println("Distanzmatrix");
         System.out.println("================================================");
         Calculator.printMatrix(m.getMatrix());
         System.out.println("================================================");
