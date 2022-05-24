@@ -1,9 +1,9 @@
 package model;
 
-import java.util.HashMap;
+import java.util.*;
 
 public class Calculator {
-    public Integer[][] calculateDistancematrix(Matrix matrix) {
+    public static Integer[][] calculateDistancematrix(Matrix matrix) {
         Integer[][] adjacencyMatrix = duplicateMatrix(matrix.getMatrix());
         Integer[][] distanceMatrix = duplicateMatrix(adjacencyMatrix); //muss dupliziert werden ansonsten ist es eine referenz auf die selbe matrix
         int matrixSize = matrix.getMatrix().length;
@@ -38,7 +38,7 @@ public class Calculator {
         return distanceMatrix;
     }
 
-    public HashMap<String, Integer> calculateEccentricity(Integer[][] matrix) {
+    public static HashMap<String, Integer> calculateEccentricity(Integer[][] matrix) {
         HashMap<String, Integer> eccentricity = new HashMap<>();
         int letterCounter = 0;
 
@@ -57,7 +57,32 @@ public class Calculator {
         return eccentricity;
     }
 
-    public static String convertIntToLetter(int i) {
+    public static int calculateRadius(HashMap<String, Integer> eccentricity) {
+        return Collections.min(eccentricity.values());
+    }
+
+    public static int calculateDiameter(HashMap<String, Integer> eccentricity) {
+        return Collections.max(eccentricity.values());
+    }
+
+    public static String calculateCenter(HashMap<String, Integer> eccentricity) {
+        StringBuilder center = new StringBuilder();
+        int radius = calculateRadius(eccentricity);
+
+        center.append('{');
+        for (Map.Entry<String, Integer> entry : eccentricity.entrySet()) {
+            String key = entry.getKey();
+            Integer value = entry.getValue();
+
+            if(value == radius)
+                center.append(key).append(',');
+        }
+        center.replace(center.lastIndexOf(","), center.lastIndexOf(",")+1, "}");
+
+        return center.toString();
+    }
+
+    private static String convertIntToLetter(int i) {
         StringBuilder letters = new StringBuilder();
         int quot = i / 26;
         int rem = i % 26;
@@ -70,7 +95,7 @@ public class Calculator {
         }
     }
 
-    private Integer[][] duplicateMatrix(Integer[][] matrix) {
+    private static Integer[][] duplicateMatrix(Integer[][] matrix) {
         Integer[][] duplicatedMatrix = new Integer[matrix.length][matrix.length];
 
         for (int i = 0; i < matrix.length; i++) {
@@ -80,7 +105,7 @@ public class Calculator {
         return duplicatedMatrix;
     }
 
-    private Integer[][] multiplyMatrix(Integer[][] m1, Integer[][] m2, int size) {
+    private static Integer[][] multiplyMatrix(Integer[][] m1, Integer[][] m2, int size) {
         Integer[][] m3 = new Integer[size][size];
 
         for (int i = 0; i < size; i++) {
@@ -95,7 +120,7 @@ public class Calculator {
         return m3;
     }
 
-    public void printMatrix(Integer[][] matrix) {
+    public static void printMatrix(Integer[][] matrix) {
         int size = matrix.length;
         StringBuilder str = new StringBuilder();
 
