@@ -2,6 +2,12 @@ package model;
 
 import java.util.*;
 
+/*
+TODO: end loop in distancematrix when already done
+TODO: check in calculateEccentricity if Integer is null- "graph nicht zusammenhängend"
+ */
+
+
 public class Calculator {
     public static Integer[][] calculateDistancematrix(Matrix matrix) {
         Integer[][] adjacencyMatrix = duplicateMatrix(matrix.getMatrix());
@@ -80,6 +86,42 @@ public class Calculator {
         center.replace(center.lastIndexOf(","), center.lastIndexOf(",")+1, "}");
 
         return center.toString();
+    }
+
+    public static Integer[][] calculatePathmatrix(Matrix matrix) {
+        Integer[][] adjacencyMatrix = duplicateMatrix(matrix.getMatrix());
+        Integer[][] pathMatrix = duplicateMatrix(adjacencyMatrix);
+        int matrixSize = matrix.getMatrix().length;
+
+        //Potenzmatrix generieren
+        Integer[][] potencyMatrix = multiplyMatrix(adjacencyMatrix, matrix.getMatrix(), matrixSize);
+        for (int i = 0; i < matrixSize; i++) {
+            for (int j = 0; j < matrixSize; j++) {
+                if (pathMatrix[i][j] != 1 && potencyMatrix[i][j] != 0) {
+                    pathMatrix[i][j] = 1;
+                }
+            }
+        }
+
+        //Hauptdiagonale der Distanzmatrix auf 1 setzen.
+        for (int i = 0; i < matrixSize; i++) {
+            pathMatrix[i][i] = 1;
+        }
+
+        for (int i = 0; i < matrixSize; i++){
+            Integer[][] tmp = duplicateMatrix(potencyMatrix);
+            potencyMatrix = multiplyMatrix(potencyMatrix, matrix.getMatrix(), matrixSize);
+
+            for (int j = 0; j < matrixSize; j++) {
+                for (int k = 0; k < matrixSize; k++) {
+                    if (pathMatrix[i][j] != 1 && pathMatrix[i][j] != 0) {
+                        pathMatrix[i][j] = 1;
+                    }
+                }
+            }
+        }
+
+        return pathMatrix;
     }
 
     private static String convertIntToLetter(int i) {
