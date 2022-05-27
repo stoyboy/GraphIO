@@ -45,7 +45,7 @@ public class Calculator {
         for (Integer[] integers : matrix) {
             int counter = 0;
             for (int j = 0; j < matrix.length; j++) {
-                if (integers[j] > counter) {
+                if (integers[j] != null && integers[j] > counter) {
                     counter = integers[j];
                 }
             }
