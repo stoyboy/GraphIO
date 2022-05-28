@@ -109,19 +109,38 @@ public class Calculator {
         }
 
         for (int i = 0; i < matrixSize; i++){
-            Integer[][] tmp = duplicateMatrix(potencyMatrix);
             potencyMatrix = multiplyMatrix(potencyMatrix, matrix.getMatrix(), matrixSize);
 
             for (int j = 0; j < matrixSize; j++) {
                 for (int k = 0; k < matrixSize; k++) {
-                    if (pathMatrix[i][j] != 1 && pathMatrix[i][j] != 0) {
-                        pathMatrix[i][j] = 1;
+                    if (pathMatrix[j][k] != 1 && potencyMatrix[j][k] != 0) {
+                        pathMatrix[j][k] = 1;
                     }
                 }
             }
         }
 
         return pathMatrix;
+    }
+
+    public static int calculateComponents(Integer[][] pathMatrix) {
+        ArrayList<String> rows = new ArrayList<>();
+        ArrayList<String> components = new ArrayList<>();
+
+        for (Integer[] integers : pathMatrix) {
+            StringBuilder tmp = new StringBuilder();
+            for (int j = 0; j < pathMatrix.length; j++) {
+                tmp.append(integers[j]);
+            }
+            rows.add(tmp.toString());
+        }
+
+        for (String row : rows) {
+            if (!components.contains(row))
+                components.add(row);
+        }
+
+        return components.size();
     }
 
     private static String convertIntToLetter(int i) {
