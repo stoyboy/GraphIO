@@ -88,28 +88,19 @@ public class Calculator {
         return center.toString();
     }
 
-    public static Integer[][] calculatePathmatrix(Matrix matrix) {
-        Integer[][] adjacencyMatrix = duplicateMatrix(matrix.getMatrix());
+    public static Integer[][] calculatePathmatrix(Integer[][] matrix) {
+        Integer[][] adjacencyMatrix = duplicateMatrix(matrix);
         Integer[][] pathMatrix = duplicateMatrix(adjacencyMatrix);
-        int matrixSize = matrix.getMatrix().length;
-
-        //Potenzmatrix generieren
-        Integer[][] potencyMatrix = multiplyMatrix(adjacencyMatrix, matrix.getMatrix(), matrixSize);
-        for (int i = 0; i < matrixSize; i++) {
-            for (int j = 0; j < matrixSize; j++) {
-                if (pathMatrix[i][j] != 1 && potencyMatrix[i][j] != 0) {
-                    pathMatrix[i][j] = 1;
-                }
-            }
-        }
+        int matrixSize = matrix.length;
 
         //Hauptdiagonale der Distanzmatrix auf 1 setzen.
         for (int i = 0; i < matrixSize; i++) {
             pathMatrix[i][i] = 1;
         }
 
+        Integer[][] potencyMatrix = multiplyMatrix(adjacencyMatrix, matrix, matrixSize);
         for (int i = 0; i < matrixSize; i++){
-            potencyMatrix = multiplyMatrix(potencyMatrix, matrix.getMatrix(), matrixSize);
+            potencyMatrix = multiplyMatrix(potencyMatrix, matrix, matrixSize);
 
             for (int j = 0; j < matrixSize; j++) {
                 for (int k = 0; k < matrixSize; k++) {
@@ -124,15 +115,15 @@ public class Calculator {
     }
 
     public static int calculateComponents(Integer[][] pathMatrix) {
-        ArrayList<String> rows = new ArrayList<>();
+        String[] rows = new String[pathMatrix.length];
         ArrayList<String> components = new ArrayList<>();
 
-        for (Integer[] integers : pathMatrix) {
+        for (int i = 0; i < pathMatrix.length; i++) {
             StringBuilder tmp = new StringBuilder();
             for (int j = 0; j < pathMatrix.length; j++) {
-                tmp.append(integers[j]);
+                tmp.append(pathMatrix[i][j]);
             }
-            rows.add(tmp.toString());
+            rows[i] = tmp.toString();
         }
 
         for (String row : rows) {
@@ -141,6 +132,42 @@ public class Calculator {
         }
 
         return components.size();
+    }
+
+
+
+    public static String calculateArticulations(Matrix matrix, int componentCount) {
+        ArrayList<Integer> articulationNodes = new ArrayList<>();
+        Integer[][] adjacencyMatrix = duplicateMatrix(matrix.getMatrix());
+        Integer[][] tmpAdjacencyMatrix = duplicateMatrix(adjacencyMatrix);
+        int matrixSize = matrix.getMatrix().length;
+        int componentsCount;
+
+        for (int i = 0; i < matrixSize; i++) {
+            for (int j = 0; j < tmpAdjacencyMatrix.length; j++) {
+                tmpAdjacencyMatrix[i][j] = 0;
+                tmpAdjacencyMatrix[j][i] = 0;
+            }
+
+            Integer[][] tmpPathMatrix = calculatePathmatrix(tmpAdjacencyMatrix);
+            componentsCount = calculateComponents(tmpPathMatrix);
+            if (componentsCount > componentCount + 1)
+                articulationNodes.add(i);
+
+            tmpAdjacencyMatrix = duplicateMatrix(adjacencyMatrix);
+        }
+
+        return articulationsToString(articulationNodes);
+    }
+
+    private static String articulationsToString(ArrayList<Integer> articulationNodes) { //TODO null exception
+        StringBuilder str = new StringBuilder();
+
+        for (Integer i : articulationNodes) {
+            str.append(convertIntToLetter(i)).append(" ");
+        }
+
+        return str.toString();
     }
 
     private static String convertIntToLetter(int i) {
