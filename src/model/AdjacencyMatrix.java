@@ -6,7 +6,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class AdjacencyMatrix extends Matrix{
+public class AdjacencyMatrix extends Matrix {
     private String filepath;
 
     public AdjacencyMatrix(String filepath) throws GraphIOException {
@@ -23,7 +23,7 @@ public class AdjacencyMatrix extends Matrix{
     }
 
     public void setFilepath(String filepath) throws GraphIOException {
-        if (filepath != null) {
+        if (filepath != null && filepath != "") {
             this.filepath = filepath;
         }
         else

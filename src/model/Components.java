@@ -5,8 +5,11 @@ import java.util.ArrayList;
 public class Components {
     private ArrayList<String> components = new ArrayList<>();
 
-    public Components(PathMatrix pathMatrix) {
-        calculate(pathMatrix);
+    public Components(PathMatrix pathMatrix) throws GraphIOException {
+        if (pathMatrix != null)
+            calculate(pathMatrix);
+        else
+            throw new GraphIOException("pathMatrix ist null");
     }
 
     public ArrayList<String> getComponents() {

@@ -2,9 +2,12 @@ package model;
 
 import java.util.ArrayList;
 
-public class PathMatrix extends Matrix{
-    public PathMatrix(AdjacencyMatrix adjacencyMatrix) {
-        calculate(adjacencyMatrix);
+public class PathMatrix extends Matrix {
+    public PathMatrix(AdjacencyMatrix adjacencyMatrix) throws GraphIOException {
+        if (adjacencyMatrix != null)
+            calculate(adjacencyMatrix);
+        else
+            throw new GraphIOException("adjacencyMatrix ist null");
     }
 
     public void calculate(AdjacencyMatrix a) {

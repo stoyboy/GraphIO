@@ -1,5 +1,7 @@
 package model;
 
+import java.util.Arrays;
+
 public class Utils {
     public static String convertIntToLetter(int i) {
         StringBuilder letters = new StringBuilder();
@@ -48,5 +50,14 @@ public class Utils {
         }
 
         return m3;
+    }
+
+    public static boolean checkNull(Integer[][] matrix) {
+        for (Integer[] i : matrix) {
+            if (Arrays.asList(i).contains(null)) {
+                return true;
+            };
+        }
+        return false;
     }
 }

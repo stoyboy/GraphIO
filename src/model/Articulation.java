@@ -5,8 +5,16 @@ import java.util.ArrayList;
 public class Articulation {
     private ArrayList<Integer> articulations;
 
-    public Articulation(AdjacencyMatrix adjacencyMatrix, int componentsSize) {
-        calculate(adjacencyMatrix, componentsSize);
+    public Articulation(AdjacencyMatrix adjacencyMatrix, int componentsSize) throws GraphIOException {
+        if (adjacencyMatrix != null) {
+            if (componentsSize >= 0) {
+                calculate(adjacencyMatrix, componentsSize);
+            }
+            else
+                throw new GraphIOException("componentsSize ist kleiner 0");
+        }
+        else
+            throw new GraphIOException("adjacencyMatrix ist null");
     }
 
     public ArrayList<Integer> getArticulations() {
@@ -17,7 +25,7 @@ public class Articulation {
         this.articulations = articulations;
     }
 
-    public void calculate(AdjacencyMatrix a, int componentCount) {
+    public void calculate(AdjacencyMatrix a, int componentCount) throws GraphIOException {
         ArrayList<Integer> articulationNodes = new ArrayList<>();
         AdjacencyMatrix adjacencyMatrix = new AdjacencyMatrix(Utils.cloneMatrix(a.getMatrix()));
         AdjacencyMatrix tmpAdjacencyMatrix = new AdjacencyMatrix(Utils.cloneMatrix(a.getMatrix()));

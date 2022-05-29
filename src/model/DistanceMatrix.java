@@ -1,8 +1,13 @@
 package model;
 
-public class DistanceMatrix extends Matrix{
-    public DistanceMatrix(AdjacencyMatrix adjacencyMatrix) {
-        calculate(adjacencyMatrix);
+import java.util.Arrays;
+
+public class DistanceMatrix extends Matrix {
+    public DistanceMatrix(AdjacencyMatrix adjacencyMatrix) throws GraphIOException {
+        if (adjacencyMatrix != null)
+            calculate(adjacencyMatrix);
+        else
+            throw new GraphIOException("adjacencyMatrix ist null");
     }
 
     public void calculate(AdjacencyMatrix a) {
@@ -35,8 +40,13 @@ public class DistanceMatrix extends Matrix{
                     }
                 }
             }
+
+            if (!Utils.checkNull(distanceMatrix))
+                break;
         }
 
         setMatrix(distanceMatrix);
     }
+
+
 }

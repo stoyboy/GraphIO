@@ -5,8 +5,16 @@ import java.util.ArrayList;
 public class Bridges {
     private ArrayList<String[]> bridges = new ArrayList<>();
 
-    public Bridges(AdjacencyMatrix adjacencyMatrix, int componentCount) {
-        calculateBridges(adjacencyMatrix, componentCount);
+    public Bridges(AdjacencyMatrix adjacencyMatrix, int componentCount) throws GraphIOException {
+        if (adjacencyMatrix != null) {
+            if (componentCount >= 0) {
+            calculateBridges(adjacencyMatrix, componentCount);
+            }
+            else
+                throw new GraphIOException("componentsSize ist kleiner 0");
+        }
+        else
+            throw new GraphIOException("adjacencyMatrix ist null");
     }
 
     public ArrayList<String[]> getBridges() {
@@ -17,7 +25,7 @@ public class Bridges {
         this.bridges = bridges;
     }
 
-    public void calculateBridges(AdjacencyMatrix a, int componentCount) {
+    public void calculateBridges(AdjacencyMatrix a, int componentCount) throws GraphIOException {
         AdjacencyMatrix adjacencyMatrix = new AdjacencyMatrix(Utils.cloneMatrix(a.getMatrix()));
         AdjacencyMatrix tmpAdjacencyMatrix = new AdjacencyMatrix(Utils.cloneMatrix(a.getMatrix()));
         int matrixSize = a.getMatrix().length;
