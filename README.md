@@ -11,20 +11,24 @@
 
 
 ## Current features
-* [Importing matrices from CSV files](#importing-matrices-from-csv-files)
+* [Importing matrices from CSV files as a adjacency matrix](#importing-matrices-from-csv-files-as-adjacency-matrix)
 * [Calculating distance matrices](#calculating-distance-matrices)
 * [Calculating eccentricities](#calculating-eccentricities)
 * [Calculating radius](#calculating-radius)
 * [Calculating diameter](#calculating-diameter)
 * [Calculating center](#calculating-center)
+* [Calculating path matrices](#calculating-path-matrices)
+* [Calculating components](#calculating-components)
+* [Calculating articulations](#calculating-articulations)
+* [Calculating bridges](#calculating-bridges)
 
 ## Examples
-### Importing matrices from CSV files
-[Heading]: #importing-matrices-from-csv-files
+### Importing matrices from CSV files as adjacency matrix
+[Heading]: #importing-matrices-from-csv-files-as-a-adjacency-matrix
 ````java
 class Test {
     public static void main(String[] args) {
-        Matrix m = new Matrix("PATH-TO-YOUR-CSV-FILE");
+        AdjacencyMatrix adjacencyMatrix = new AdjacencyMatrix("PATH-TO-YOUR-CSV-FILE");
     }
 }
 ````
@@ -34,19 +38,15 @@ class Test {
 ````java
 class Test {
     public static void main(String[] args) {
-        Matrix m = new Matrix("PATH-TO-YOUR-CSV-FILE");
+        AdjacencyMatrix adjacencyMatrix = new AdjacencyMatrix("PATH-TO-YOUR-CSV-FILE");
+        DistanceMatrix distanceMatrix = new DistanceMatrix(adjacencyMatrix);
         
-        System.out.println("Distanzmatrix");
-        System.out.println("================================================");
-        Calculator.printMatrix(m.getMatrix());
-        System.out.println("================================================");
+        distanceMatrix.printMatrix();
     }
 }
 ````
 #### Output
-````test
-Distanzmatrix
-================================================
+````text
 0|1|2|2|3|4|4|4|4|5|5|5|6|6|7|7|6|8|8|7|7|8|9|9|
 1|0|1|1|2|3|3|3|3|4|4|4|5|5|6|6|5|7|7|6|6|7|8|8|
 2|1|0|1|1|2|2|2|2|3|3|3|4|4|5|5|4|6|6|5|5|6|7|7|
@@ -71,7 +71,6 @@ Distanzmatrix
 8|7|6|6|5|6|6|4|5|4|3|7|8|4|4|3|2|5|5|2|1|0|1|1|
 9|8|7|7|6|7|7|5|6|5|4|8|9|5|5|4|3|6|6|3|2|1|0|1|
 9|8|7|7|6|7|7|5|6|5|4|8|9|5|5|4|3|6|6|3|2|1|1|0|
-================================================
 ````
 
 ### Calculating eccentricities
@@ -79,27 +78,17 @@ Distanzmatrix
 ````java
 class Test {
     public static void main(String[] args) {
-        Matrix m = new Matrix("PATH-TO-YOUR-CSV-FILE");
-        Integer[][] distanceMatrix = Calculator.calculateDistancematrix(m);
-
-        System.out.println("Exzentrizität");
-        System.out.println("================================" +
-                "===========================================" +
-                "=============================================");
-        HashMap<String, Integer> eccentricity = Calculator.calculateEccentricity(distanceMatrix);
-        System.out.println(eccentricity);
-        System.out.println("================================" +
-                "===========================================" +
-                "=============================================");
+        AdjacencyMatrix adjacencyMatrix = new AdjacencyMatrix("PATH-TO-YOUR-CSV-FILE");
+        DistanceMatrix distanceMatrix = new DistanceMatrix(adjacencyMatrix);
+        Eccentricity eccentricity = new Eccentricity(distanceMatrix);
+        
+        eccentricity.printEccentricity();
     }
 }
 ````
 #### Output
 ````text
-Exzentrizität
-========================================================================================================================
 {A=9, B=8, C=7, D=7, E=6, F=7, G=7, H=5, I=6, J=5, K=5, L=8, M=9, N=6, O=7, P=7, Q=6, R=8, S=8, T=7, U=7, V=8, W=9, X=9}
-========================================================================================================================
 ````
 
 ### Calculating radius
@@ -107,23 +96,17 @@ Exzentrizität
 ````java
 class Test {
     public static void main(String[] args) {
-        Matrix m = new Matrix("PATH-TO-YOUR-CSV-FILE");
-        Integer[][] distanceMatrix = Calculator.calculateDistancematrix(m);
-        HashMap<String, Integer> eccentricity = Calculator.calculateEccentricity(distanceMatrix);
-        
-        System.out.println("Radius");
-        System.out.println("================================");
-        System.out.println("rad(G) = " + Calculator.calculateRadius(eccentricity));
-        System.out.println("================================");
+        AdjacencyMatrix adjacencyMatrix = new AdjacencyMatrix("PATH-TO-YOUR-CSV-FILE");
+        DistanceMatrix distanceMatrix = new DistanceMatrix(adjacencyMatrix);
+        Eccentricity eccentricity = new Eccentricity(distanceMatrix);
+
+        eccentricity.printRadius();
     }
 }
 ````
 #### Output
 ````text
-Radius
-================================================
 rad(G) = 5
-================================================
 ````
 
 ### Calculating diameter
@@ -131,23 +114,17 @@ rad(G) = 5
 ````java
 class Test {
     public static void main(String[] args) {
-        Matrix m = new Matrix("PATH-TO-YOUR-CSV-FILE");
-        Integer[][] distanceMatrix = Calculator.calculateDistancematrix(m);
-        HashMap<String, Integer> eccentricity = Calculator.calculateEccentricity(distanceMatrix);
-        
-        System.out.println("Durchmesser");
-        System.out.println("================================");
-        System.out.println("dm(G) = " + Calculator.calculateDiameter(eccentricity));
-        System.out.println("================================");
+        AdjacencyMatrix adjacencyMatrix = new AdjacencyMatrix("PATH-TO-YOUR-CSV-FILE");
+        DistanceMatrix distanceMatrix = new DistanceMatrix(adjacencyMatrix);
+        Eccentricity eccentricity = new Eccentricity(distanceMatrix);
+
+        eccentricity.printDiameter();
     }
 }
 ````
 #### Output
 ````text
-Durchmesser
-================================================
 dm(G) = 9
-================================================
 ````
 
 ### Calculating center
@@ -155,23 +132,119 @@ dm(G) = 9
 ````java
 class Test {
     public static void main(String[] args) {
-        Matrix m = new Matrix("PATH-TO-YOUR-CSV-FILE");
-        Integer[][] distanceMatrix = Calculator.calculateDistancematrix(m);
-        HashMap<String, Integer> eccentricity = Calculator.calculateEccentricity(distanceMatrix);
-        
-        System.out.println("Zentrum");
-        System.out.println("================================");
-        System.out.println("Z(G) = " + Calculator.calculateCenter(eccentricity));
-        System.out.println("================================");
+        AdjacencyMatrix adjacencyMatrix = new AdjacencyMatrix("PATH-TO-YOUR-CSV-FILE");
+        DistanceMatrix distanceMatrix = new DistanceMatrix(adjacencyMatrix);
+        Eccentricity eccentricity = new Eccentricity(distanceMatrix);
+
+        eccentricity.printCenter();
     }
 }
 ````
 #### Output
 ````text
-Zentrum
-================================================
 Z(G) = {H,J,K}
-================================================
+````
+
+### Calculating path matrices
+[Heading]: #calculating-path-matrices
+````java
+class Test {
+    public static void main(String[] args) {
+        AdjacencyMatrix adjacencyMatrix = new AdjacencyMatrix("PATH-TO-YOUR-CSV-FILE");
+        PathMatrix pathMatrix = new PathMatrix(adjacencyMatrix);
+        
+        pathMatrix.printMatrix();
+    }
+}
+````
+#### Output
+````text
+1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|
+1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|
+1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|
+1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|
+1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|
+1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|
+1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|
+1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|
+1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|
+1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|
+1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|
+1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|
+1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|
+1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|
+1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|
+1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|
+1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|
+1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|
+1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|
+1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|
+1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|
+1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|
+1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|
+1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|1|
+````
+
+### Calculating components
+[Heading]: #calculating-components
+````java
+class Test {
+    public static void main(String[] args) {
+        AdjacencyMatrix adjacencyMatrix = new AdjacencyMatrix("PATH-TO-YOUR-CSV-FILE");
+        PathMatrix pathMatrix = new PathMatrix(adjacencyMatrix);
+        Components components = new Components(pathMatrix);
+
+        components.print();
+    }
+}
+````
+#### Output
+````text
+c(G) = 1
+K₁ = (K(1), {A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X})
+````
+
+### Calculating articulations
+````java
+class Test {
+    public static void main(String[] args) {
+        AdjacencyMatrix adjacencyMatrix = new AdjacencyMatrix("PATH-TO-YOUR-CSV-FILE");
+        PathMatrix pathMatrix = new PathMatrix(adjacencyMatrix);
+        Components components = new Components(pathMatrix);
+        Articulation articulation = new Articulation(adjacencyMatrix, components.getComponents().size());
+
+        articulation.print();
+    }
+}
+````
+#### Output
+`````text
+B E G H K L O Q U V 
+`````
+
+### Calculating bridges
+````java
+class Test {
+    public static void main(String[] args) {
+        AdjacencyMatrix adjacencyMatrix = new AdjacencyMatrix("PATH-TO-YOUR-CSV-FILE");
+        PathMatrix pathMatrix = new PathMatrix(adjacencyMatrix);
+        Components components = new Components(pathMatrix);
+        Bridges bridges = new Bridges(adjacencyMatrix, components.getComponents().size());
+
+        bridges.print();
+    }
+}
+````
+#### Output
+````text
+[A,B]
+[B,A]
+[G,L]
+[L,G]
+[L,M]
+[M,L]
+[U,V]
+[V,U]
 ````
 ## Author
 
