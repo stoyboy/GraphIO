@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class AdjacencyMatrix extends Matrix {
     private String filepath;
@@ -23,14 +24,14 @@ public class AdjacencyMatrix extends Matrix {
     }
 
     public void setFilepath(String filepath) throws GraphIOException {
-        if (filepath != null && filepath != "") {
+        if (filepath != null && !filepath.equals("")) {
             this.filepath = filepath;
         }
         else
             throw new GraphIOException("Dateipfad ist null");
     }
 
-    public void readMatrix() {
+    public void readMatrix() throws GraphIOException {
         try (
                 BufferedReader br = new BufferedReader(new FileReader(getFilepath()))
         )
@@ -68,10 +69,13 @@ public class AdjacencyMatrix extends Matrix {
         }
     }
 
-    private void parseMatrix(String[][] stringMatrix) throws NumberFormatException {
+    private void parseMatrix(String[][] stringMatrix) throws NumberFormatException, GraphIOException {
         for (int i = 0; i < stringMatrix.length; i++) {
             for (int j = 0; j < stringMatrix[i].length; j++) {
-                this.matrix[i][j] = Integer.parseInt(stringMatrix[i][j]);
+                if (stringMatrix[i][j].equals("1") || stringMatrix[i][j].equals("0"))
+                    this.matrix[i][j] = Integer.parseInt(stringMatrix[i][j]);
+                else
+                    throw new GraphIOException("Adjazenzmatrix enthält Werte, welche nicht 1 oder 0 entsprechen");
             }
         }
     }
